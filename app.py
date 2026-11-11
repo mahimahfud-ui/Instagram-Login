@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, render_template_string
 import random
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ LOGIN_PAGE_HTML = """
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Instagram Login</title>
+<title>Instagram UI Demo</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
 <style>
@@ -82,15 +82,36 @@ input::placeholder {
 
 /* Login button */
 .login-btn {
+    display: block;
     width: 100%;
     margin-top: 12px;
-    padding: 12px 0;
+    padding: 12px 12px;
     background: #0095f6;
     color: #fff;
     border: none;
     border-radius: 24px;
     font-size: 15px;
     font-weight: 600;
+    line-height: 1.35;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.demo-notice {
+    margin: 0 auto 18px;
+    padding: 12px 14px;
+    border: 1px solid #f0c36d;
+    border-radius: 10px;
+    background: #fff8e8;
+    color: #684b13;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.demo-open {
+    margin-top: 12px;
 }
 
 /* Forgot */
@@ -152,33 +173,25 @@ input::placeholder {
         <div class="language">English (US)</div>
 
         <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram-inspired demo icon">
         </div>
 
-        <form action="/login" method="POST">
-            <div class="inputs">
-                <input type="text" name="username" placeholder="Username, email or mobile number" required>
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
+        <div class="demo-notice" role="note">
+            UNOFFICIAL DEMO — This page is not Instagram or Meta. No real account sign-in is available. Do not enter account credentials.
+        </div>
 
-            <button type="submit" class="login-btn">Log in</button>
-
-            <div class="forgot">Forgot password?</div>
-
-            <div class="create">
-                <button type="button">Create new account</button>
-            </div>
-        </form>
+        <a class="login-btn demo-open" href="/dashboard">Open demo dashboard</a>
+        <div class="forgot">Sample activity only · No Instagram account is connected</div>
     </div>
 
     <div class="bottom">
         <div class="meta">
-            <span>∞</span>
-            <span>Meta</span>
+            <span>Demo</span>
+            <span>Preview</span>
         </div>
 
         <div class="footer">
-            © Meta 2025 · Privacy · Cookie Policy · Terms · English (UK)
+            Unofficial interface demonstration · Not affiliated with Instagram or Meta
         </div>
     </div>
 
@@ -195,33 +208,234 @@ RESULTS_PAGE_HTML = """
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Activity Dashboard</title>
+<title>Activity Dashboard Demo</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-body { background-color:#f5f5f7; color:#333; min-height:100vh; position:relative; padding-bottom:50px; }
-.header { background: linear-gradient(180deg,#fff 0%,#e9ecef 100%); height:120px; display:flex; justify-content:center; align-items:center; position:relative; padding:10px; }
-.insta-logo { font-size:48px; font-weight:bold; font-family:'Billabong', cursive; background: linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-align:center; }
-.top-nav { display:grid; grid-template-columns:repeat(3,1fr); background:#fff; border-bottom:1px solid #ddd; text-align:center; padding:12px 0; }
-.nav-item { display:flex; flex-direction:column; align-items:center; gap:4px; font-size:13px; font-weight:600; color:#444; position:relative; }
-.nav-item i { font-size:20px; color:#222; }
-.badge { position:absolute; top:-5px; right:25%; background:#ff4757; color:white; font-size:10px; padding:2px 5px; border-radius:10px; border:2px solid #fff; }
-.list-container { margin-top:10px; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.05); max-height:calc(100vh-200px); overflow-y:auto; }
-.list-item { display:flex; align-items:center; padding:14px 16px; border-bottom:1px solid #f1f1f1; transition: background 0.2s; cursor:pointer; }
-.list-item:last-child { border-bottom:none; }
-.list-item:active { background-color:#f0f0f0; }
-.icon-box { width:35px; font-size:18px; display:flex; justify-content:center; margin-right:12px; position:relative; }
-.item-text { flex-grow:1; font-size:15px; font-weight:500; }
-.count { font-weight:bold; color:#555; margin-right:8px; }
-.arrow { color:#ccc; font-size:14px; }
-.trusted-footer { position:fixed; bottom:0; width:100%; background:#fff; text-align:center; font-size:12px; color:#555; padding:5px 0; box-shadow:0 -1px 5px rgba(0,0,0,0.05); }
-@media screen and (max-width:480px) {
-.insta-logo { font-size:36px; }
-.top-nav { padding:10px 0; }
-.list-item { padding:10px 12px; }
-.icon-box { width:30px; font-size:16px; margin-right:8px; }
-.item-text { font-size:14px; }
-.count { margin-right:5px; font-size:13px; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    background: #f5f5f7;
+    color: #333;
+}
+
+.header {
+    width: 100%;
+    min-height: clamp(82px, 14vh, 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 16px;
+    background: linear-gradient(180deg, #fff 0%, #e9ecef 100%);
+}
+
+.insta-logo {
+    font-size: clamp(34px, 7vw, 48px);
+    font-weight: bold;
+    font-family: "Billabong", cursive;
+    background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+}
+
+.demo-banner {
+    width: 100%;
+    padding: 9px 14px;
+    background: #fff8e8;
+    border-top: 1px solid #f0d69b;
+    border-bottom: 1px solid #f0d69b;
+    color: #684b13;
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.top-nav {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    padding: 12px 8px;
+    background: #fff;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.nav-item {
+    min-width: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 2px 4px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.nav-item i {
+    color: #222;
+    font-size: 20px;
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    right: 18%;
+    padding: 2px 5px;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    background: #ff4757;
+    color: #fff;
+    font-size: 10px;
+    line-height: 1.2;
+}
+
+.dashboard-main {
+    width: 100%;
+    max-width: 780px;
+    flex: 1 0 auto;
+    margin: 14px auto 18px;
+    padding: 0 16px;
+}
+
+.list-container {
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 58px;
+    padding: 13px 16px;
+    border-bottom: 1px solid #f1f1f1;
+    transition: background 0.2s;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item:active {
+    background: #f0f0f0;
+}
+
+.icon-box {
+    position: relative;
+    display: flex;
+    flex: 0 0 35px;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.item-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.count {
+    flex: 0 0 auto;
+    margin-left: auto;
+    color: #555;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.arrow {
+    flex: 0 0 auto;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.trusted-footer {
+    width: 100%;
+    margin-top: auto;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: #fff;
+    color: #555;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.05);
+    font-size: 12px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .top-nav {
+        padding: 10px 5px;
+    }
+
+    .nav-item {
+        font-size: 11px;
+    }
+
+    .nav-item i {
+        font-size: 18px;
+    }
+
+    .dashboard-main {
+        margin-top: 12px;
+        padding: 0 12px;
+    }
+
+    .list-item {
+        gap: 8px;
+        min-height: 54px;
+        padding: 11px 12px;
+    }
+
+    .icon-box {
+        flex-basis: 28px;
+        font-size: 16px;
+    }
+
+    .item-text {
+        font-size: 14px;
+    }
+
+    .count {
+        font-size: 13px;
+    }
+}
+
+@media (max-height: 620px) {
+    .header {
+        min-height: 76px;
+    }
+
+    .list-item {
+        min-height: 50px;
+        padding-top: 9px;
+        padding-bottom: 9px;
+    }
 }
 </style>
 </head>
@@ -229,6 +443,10 @@ body { background-color:#f5f5f7; color:#333; min-height:100vh; position:relative
 
 <div class="header">
     <div class="insta-logo">Instagram</div>
+</div>
+
+<div class="demo-banner" role="status">
+    DEMO PREVIEW · Sample activity only · Not connected to Instagram or Meta
 </div>
 
 <div class="top-nav">
@@ -248,6 +466,7 @@ body { background-color:#f5f5f7; color:#333; min-height:100vh; position:relative
     </div>
 </div>
 
+<main class="dashboard-main">
 <div class="list-container">
     <div class="list-item">
         <div class="icon-box"><i class="fas fa-plus"></i></div>
@@ -301,9 +520,10 @@ body { background-color:#f5f5f7; color:#333; min-height:100vh; position:relative
         <i class="fas fa-chevron-right arrow"></i>
     </div>
 </div>
+</main>
 
 <div class="trusted-footer">
-    © 2025 Meta Platforms, Inc. | All rights reserved. Meta authorized
+    Demo interface · Sample statistics only · Not affiliated with Instagram or Meta
 </div>
 
 </body>
@@ -311,23 +531,14 @@ body { background-color:#f5f5f7; color:#333; min-height:100vh; position:relative
 """
 
 # ================= Flask Routes =================
-@app.route('/')
+@app.route("/")
 def index():
     return render_template_string(LOGIN_PAGE_HTML)
 
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.form.get('username')
-    password = request.form.get('password')
 
-    # Print credentials to console
-    print(f"\n{'='*50}")
-    print("Received credentials:")
-    print(f"Username: {username}")
-    print(f"Password: {password}")
-    print(f"{'='*50}\n")
-
-    # Generate random statistics
+@app.route("/dashboard")
+def dashboard():
+    # All figures are synthetic demo values; no account data is requested or accessed.
     followers = random.randint(100, 1000)
     unfollowed = random.randint(50, 500)
     you_unfollowed = random.randint(50, 600)
