@@ -85,7 +85,14 @@ def token_cipher():
 
 
 def is_configured():
-    if not (INSTAGRAM_CLIENT_ID and INSTAGRAM_CLIENT_SECRET and INSTAGRAM_REDIRECT_URI):
+    if not (
+        os.getenv("FLASK_SECRET_KEY")
+        and INSTAGRAM_CLIENT_ID
+        and INSTAGRAM_CLIENT_SECRET
+        and INSTAGRAM_REDIRECT_URI
+    ):
+        return False
+    if os.getenv("RENDER") and not os.getenv("DATABASE_URL"):
         return False
     parsed = urlparse(INSTAGRAM_REDIRECT_URI)
     return parsed.scheme == "https" and bool(parsed.netloc)
@@ -274,7 +281,7 @@ footer{margin-top:24px;color:#98a0ae;font-size:11px;text-align:center}
 <div class="notice">Instagram sign-in is not configured yet. The service owner must add the Instagram Business Login app credentials and the exact HTTPS callback URL in the hosting environment.</div>
 {% endif %}
 <div class="notice">You will be redirected to <strong>instagram.com</strong> to sign in and approve access. This app never asks for or receives your Instagram password.</div>
-{% if not configured %}<p class="setup">Required server settings: INSTAGRAM_APP_ID, INSTAGRAM_APP_SECRET, INSTAGRAM_REDIRECT_URI and FLASK_SECRET_KEY.</p>{% endif %}
+{% if not configured %}<p class="setup">Required settings: FLASK_SECRET_KEY, INSTAGRAM_APP_ID, INSTAGRAM_APP_SECRET and INSTAGRAM_REDIRECT_URI. Production also requires a persistent DATABASE_URL.</p>{% endif %}
 <footer>Independent application · Not affiliated with or endorsed by Instagram or Meta</footer>
 </main></body></html>"""
 
