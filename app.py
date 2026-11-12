@@ -399,7 +399,7 @@ def instagram_auth_callback():
             raise RuntimeError("Instagram did not return the connected account ID.")
         save_connection(current_session_id(), profile, access_token, expires_in)
     except (requests.RequestException, RuntimeError, ValueError) as exc:
-        logger.warning("Instagram OAuth callback failed: %s", str(exc)[:180])
+        logger.warning("Instagram OAuth callback failed (%s).", type(exc).__name__)
         return render_message(
             "Could not connect Instagram",
             "Meta did not complete the connection. Check the Instagram app settings, approved permissions and callback URL, then try again.",
