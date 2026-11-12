@@ -10,7 +10,7 @@ from app import app
 
 class InstagramOAuthSecurityTests(unittest.TestCase):
     def setUp(self):
-        app.config.update(TESTING=True, SECRET_KEY="test-only-secret")
+        app.config.update(TESTING=True, SECRET_KEY="test-only-secret", SESSION_COOKIE_SECURE=False)
         self.client = app.test_client()
 
     def test_home_has_no_password_capture_form(self):
